@@ -1,0 +1,9 @@
+/.idea/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# TFO2ReelLogger Specific
+/html_data/
+reellog.db
