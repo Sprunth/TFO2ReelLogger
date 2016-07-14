@@ -1,5 +1,6 @@
 import sqlite3
 import Scraper
+import sys
 
 
 def create_db():
@@ -27,26 +28,41 @@ def sample_db_entry():
     conn.close()
 
 
-def parse_and_store():
+def parse_and_store(html_file_path):
     conn = sqlite3.connect('reellog.db')
     c = conn.cursor()
 
-    to_write = Scraper.scrape()
+    c.execute("SELECT COUNT(*) from reellog")
+    (old_entry_count, ) = c.fetchone()
+
+    to_write = Scraper.scrape(html_file_path)
 
     for row in to_write:
         command = "INSERT INTO reellog VALUES (%s)" % row
         try:
             c.execute(command)
+            print('+ %s' % row)
         except sqlite3.IntegrityError:
-            print('duplicate entry: %s', row)
+            print('= %s' % row)
 
     conn.commit()
+
+    c.execute("SELECT COUNT(*) from reellog")
+    (new_entry_count,) = c.fetchone()
+
     conn.close()
+
+    print("%i new entries added" % (int(new_entry_count) - int(old_entry_count)))
 
 
 if __name__ == '__main__':
+
+    if len(sys.argv) != 2:
+        print("Need one argument: path to html_file", file=sys.stderr)
+        sys.exit(1)
+
     # create_db()
-    parse_and_store()
+    parse_and_store(sys.argv[1])
     # sample_db_entry()
 
     print('Done')

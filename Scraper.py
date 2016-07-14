@@ -1,11 +1,12 @@
 from bs4 import BeautifulSoup
 from pprint import pprint
 from functools import reduce
+import sys
 
 
-def scrape():
+def scrape(html_file_path):
 
-    soup = BeautifulSoup(open('html_data/reellog.html'), 'html.parser')
+    soup = BeautifulSoup(open(html_file_path), 'html.parser')
 
     rows = soup.find_all('tr')
 
@@ -15,7 +16,7 @@ def scrape():
         cols = row.find_all('td')
 
         lure_string = list(cols[0].descendants)[0]
-        lure = lure_string.find_all('img')[0].string
+        lure = lure_string.find_all('img')[0].string.strip()
 
         body_of_water = cols[1].string
 
@@ -46,5 +47,10 @@ def scrape():
     return commands
 
 if __name__ == '__main__':
-    scrape_data = scrape()
+
+    if len(sys.argv) != 2:
+        print("Need one argument: path to html_file", file=sys.stderr)
+        sys.exit(1)
+
+    scrape_data = scrape(sys.argv[1])
     pprint(scrape_data)
