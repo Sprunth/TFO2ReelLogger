@@ -36,6 +36,8 @@ def scrape(html_file_path):
         fish_class = reduce(lambda x, y: "%s %s" % (x, y), size_strings[weight_idx+1:])
         if 'L e g e n d a r y' in fish_class:
             fish_class = 'Legendary'
+        elif 'B R U I S E R' in fish_class:
+            fish_class = 'Bruiser'
 
         # size not stored for now
         # size = reduce(lambda x, y: "%s %s" % (x, y), size_strings[:-3])
