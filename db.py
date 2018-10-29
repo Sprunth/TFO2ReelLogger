@@ -1,3 +1,4 @@
+import os.path
 import sqlite3
 import Scraper
 import sys
@@ -61,7 +62,9 @@ if __name__ == '__main__':
         print("Need one argument: path to html_file", file=sys.stderr)
         sys.exit(1)
 
-    # create_db()
+    if not os.path.isfile('reellog.db'):
+        print('No reellog.db found, creating')
+        create_db()
     parse_and_store(sys.argv[1])
     # sample_db_entry()
 
