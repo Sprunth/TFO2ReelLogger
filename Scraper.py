@@ -16,7 +16,7 @@ def scrape(html_file_path):
         cols = row.find_all('td')
 
         lure_string = list(cols[0].descendants)[0]
-        lure = lure_string.find_all('img')[0].string.strip()
+        lure = lure_string.text
 
         body_of_water = cols[1].string
 
@@ -24,7 +24,7 @@ def scrape(html_file_path):
 
         fish_string = cols[3]
         fish_type = fish_string.font.string
-        fish_level = fish_string.img.string.split()[-1]
+        fish_level = fish_string.find('font').text
 
         size_strings = list(map(lambda x: x.string, cols[4].find_all('font')))
         weight_idx = -1
@@ -47,6 +47,7 @@ def scrape(html_file_path):
         commands.append(command)
 
     return commands
+
 
 if __name__ == '__main__':
 
